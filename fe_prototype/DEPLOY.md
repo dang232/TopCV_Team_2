@@ -1,54 +1,62 @@
 # Deploy to Vercel
 
 The frontend is a Vite SPA. The `/api/*` routes are served by a single Vercel
-Serverless Function (`api/[...path].ts`) backed by **Vercel KV** (Upstash
-Redis under the hood).
+Serverless Function (`api/[...path].ts`) backed by **Supabase Postgres** (free
+tier, no card).
 
 ## One-time setup
 
-1. Push this repo to GitHub.
-2. On <https://vercel.com> → **Add New → Project**.
-3. Import the repo and set:
+1. Create a free project at <https://supabase.com> (GitHub signup is fine).
+2. In Supabase → **SQL Editor**, run the contents of `supabase/schema.sql`.
+3. In Supabase → **Project Settings → API**, copy:
+   - **Project URL** → `SUPABASE_URL`
+   - **service_role** key (not anon) → `SUPABASE_SERVICE_ROLE_KEY`
+4. Push this repo to GitHub and import on <https://vercel.com>:
    - **Root Directory**: `fe_prototype`
    - Framework Preset: Vite (auto)
-   - Build Command: `pnpm build` (auto)
-   - Output Directory: `dist` (auto)
-4. Click **Deploy** once so the project exists. The first deploy will work for
-   the static UI, but `/api/*` will return 500 until KV is attached.
-5. In the project → **Storage → Create Database → KV**. Pick a name and
-   region, attach it to the project. Vercel auto-injects `KV_REST_API_URL` and
-   `KV_REST_API_TOKEN` (which `@vercel/kv` reads).
-6. Trigger a redeploy (Deployments tab → ... → Redeploy).
+5. In Vercel → **Settings → Environment Variables**, add both vars for
+   Production (and Preview if you want).
+6. Deploy / redeploy. `/api/jobs` should return the seeded job list.
+
+### Set env vars via CLI (optional)
+
+```bash
+cd fe_prototype
+vercel env add SUPABASE_URL production
+vercel env add SUPABASE_SERVICE_ROLE_KEY production
+vercel --prod
+```
 
 ## Local dev
 
-Unchanged: `pnpm dev` runs both vite and json-server. The serverless code in
-`api/` is only used in production. To smoke-test the function locally, run
-`pnpm vercel dev` (requires `pnpm dlx vercel link` first).
+Unchanged: `pnpm dev` runs Vite + json-server on port 3001. Vite proxies
+`/api` → json-server. The Supabase function is only used on Vercel.
+
+To test the serverless handler locally:
+
+```bash
+# .env.local with SUPABASE_URL + SUPABASE_SERVICE_ROLE_KEY
+pnpm dlx vercel dev
+```
 
 ## Data lifecycle
 
-- The `jobs` collection is **auto-seeded** the first time it's read.
-- All other collections (`users`, `applications`, `profiles`, `favorites`,
-  `cvs`) start empty and grow as users register.
-- KV is shared across all preview + production deployments of the same
-  project.
+- `jobs` is **auto-seeded** on first read when the table is empty.
+- Other collections start empty and grow as users register.
+- Data is shared across preview + production for the same Supabase project.
 
-## Limits to be aware of
+## Resetting data
 
-- Serverless body size: 1 MB per request. CV uploads are capped to 500 KB on
-  the client to leave headroom for base64 overhead and JSON envelope.
-- KV value size: 1 MB per key. Each collection lives in one key, so heavy
-  use of CV uploads will eventually need a different storage strategy
-  (Vercel Blob is the natural next step).
-- Free KV plan: ~30k commands/day. Plenty for a class demo, not a real app.
+In Supabase → **Table Editor** → `entries`, delete rows by `collection`, or
+run in SQL Editor:
 
-## Resetting the data
-
-Use the Vercel KV dashboard → CLI tab and run:
-
-```
-DEL topcv:users topcv:applications topcv:profiles topcv:favorites topcv:cvs
+```sql
+delete from public.entries where collection in ('users', 'applications', 'profiles', 'favorites', 'cvs');
+-- omit 'jobs' unless you want a fresh seed on next GET /api/jobs
 ```
 
-Leave `topcv:jobs` alone unless you want to re-seed it.
+## Limits
+
+- Serverless body: 1 MB per request. CV uploads are capped at 500 KB client-side.
+- Free Supabase: 500 MB DB, plenty for a class prototype.
+- `service_role` must stay server-side only (Vercel env), never in the client.

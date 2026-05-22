@@ -370,7 +370,7 @@
   ],
   "profiles": [
     {
-      "ghostMode": false,
+      "ghostMode": true,
       "seeking": true,
       "discoverable": true,
       "blockedCompanies": [

@@ -1,10 +1,10 @@
-import { Redis } from '@upstash/redis';
+import { createClient } from '@supabase/supabase-js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 
-const redis = new Redis({
-  url: process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL ?? '',
-  token: process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN ?? '',
-});
+const supabase = createClient(
+  process.env.SUPABASE_URL ?? '',
+  process.env.SUPABASE_SERVICE_ROLE_KEY ?? ''
+);
 
 const SEED_JOBS = [
   { id: '1', company: 'VNG Corporation', logo: '🎮', title: 'Senior Product Manager', salaryGross: '50-80M VND', salaryNet: '40-64M VND', location: 'Q.7, HCM', tags: ['Hybrid', 'Tech', 'Insurance'], description: 'Leading product strategy for gaming platform with 10M+ users', requirements: ['5+ years PM experience', 'Gaming industry knowledge', 'Data-driven mindset'] },
@@ -27,21 +27,36 @@ const SEED_JOBS = [
 const COLLECTIONS = ['users', 'jobs', 'applications', 'profiles', 'favorites', 'cvs'] as const;
 type Collection = (typeof COLLECTIONS)[number];
 
-function key(c: Collection) {
-  return `topcv:${c}`;
+function rowId(row: { id?: string | number }): string {
+  return String(row.id);
 }
 
-async function read<T>(c: Collection): Promise<T[]> {
-  const data = (await redis.get<T[]>(key(c))) ?? [];
-  if (c === 'jobs' && data.length === 0) {
-    await redis.set(key(c), SEED_JOBS);
+async function read<T extends { id?: string | number }>(c: Collection): Promise<T[]> {
+  const { data, error } = await supabase
+    .from('entries')
+    .select('data')
+    .eq('collection', c);
+  if (error) throw error;
+  const rows = (data ?? []).map((r) => r.data as T);
+  if (c === 'jobs' && rows.length === 0) {
+    await write(c, SEED_JOBS as unknown as T[]);
     return SEED_JOBS as unknown as T[];
   }
-  return data;
+  return rows;
 }
 
-async function write<T>(c: Collection, rows: T[]): Promise<void> {
-  await redis.set(key(c), rows);
+async function write<T extends { id?: string | number }>(c: Collection, rows: T[]): Promise<void> {
+  const { error: delError } = await supabase.from('entries').delete().eq('collection', c);
+  if (delError) throw delError;
+  if (rows.length === 0) return;
+  const { error: insError } = await supabase.from('entries').insert(
+    rows.map((row) => ({
+      collection: c,
+      id: rowId(row),
+      data: row as Record<string, unknown>,
+    }))
+  );
+  if (insError) throw insError;
 }
 
 function pickFilters(query: VercelRequest['query']) {
@@ -89,6 +104,12 @@ function nextNumericId(rows: Array<{ id?: string | number }>): number {
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
+    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      return res.status(500).json({
+        error: 'Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY',
+      });
+    }
+
     const path = (req.query.path as string[] | undefined) ?? [];
     const [collectionName, idParam] = path;
     if (!collectionName || !COLLECTIONS.includes(collectionName as Collection)) {
