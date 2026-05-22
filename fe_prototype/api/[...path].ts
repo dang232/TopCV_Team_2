@@ -1,5 +1,10 @@
-import { kv } from '@vercel/kv';
+import { Redis } from '@upstash/redis';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+
+const redis = new Redis({
+  url: process.env.KV_REST_API_URL ?? process.env.UPSTASH_REDIS_REST_URL ?? '',
+  token: process.env.KV_REST_API_TOKEN ?? process.env.UPSTASH_REDIS_REST_TOKEN ?? '',
+});
 
 const SEED_JOBS = [
   { id: '1', company: 'VNG Corporation', logo: '🎮', title: 'Senior Product Manager', salaryGross: '50-80M VND', salaryNet: '40-64M VND', location: 'Q.7, HCM', tags: ['Hybrid', 'Tech', 'Insurance'], description: 'Leading product strategy for gaming platform with 10M+ users', requirements: ['5+ years PM experience', 'Gaming industry knowledge', 'Data-driven mindset'] },
@@ -27,16 +32,16 @@ function key(c: Collection) {
 }
 
 async function read<T>(c: Collection): Promise<T[]> {
-  const data = (await kv.get<T[]>(key(c))) ?? [];
+  const data = (await redis.get<T[]>(key(c))) ?? [];
   if (c === 'jobs' && data.length === 0) {
-    await kv.set(key(c), SEED_JOBS);
+    await redis.set(key(c), SEED_JOBS);
     return SEED_JOBS as unknown as T[];
   }
   return data;
 }
 
 async function write<T>(c: Collection, rows: T[]): Promise<void> {
-  await kv.set(key(c), rows);
+  await redis.set(key(c), rows);
 }
 
 function pickFilters(query: VercelRequest['query']) {
