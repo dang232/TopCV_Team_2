@@ -8,6 +8,7 @@ interface ProfileVisibilityProps {
   onDiscoverableChange: (v: boolean) => void;
   connectCount: number;
   cvName?: string;
+  onChangeCv?: () => void;
 }
 
 export function ProfileVisibility({
@@ -16,7 +17,8 @@ export function ProfileVisibility({
   discoverable,
   onDiscoverableChange,
   connectCount,
-  cvName = 'CV_Frontend_2026.pdf',
+  cvName = 'Chưa có CV',
+  onChangeCv,
 }: ProfileVisibilityProps) {
   return (
     <div className="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
@@ -37,7 +39,11 @@ export function ProfileVisibility({
           <FileText className="w-4 h-4 text-gray-500 shrink-0" />
           <span className="text-sm text-gray-700 truncate">{cvName}</span>
         </div>
-        <button className="text-xs font-semibold text-gray-700 px-3 py-1.5 rounded-lg bg-white border border-gray-200 hover:bg-gray-50">
+        <button
+          type="button"
+          onClick={onChangeCv}
+          className="text-xs font-semibold text-gray-700 px-3 py-1.5 rounded-lg bg-white border border-gray-200 hover:bg-gray-50"
+        >
           Thay đổi
         </button>
       </div>

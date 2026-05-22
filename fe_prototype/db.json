@@ -108,6 +108,206 @@
         "Agile/Scrum",
         "4+ years PO"
       ]
+    },
+    {
+      "id": "6",
+      "company": "FPT Software",
+      "logo": "💻",
+      "title": "Senior Frontend Engineer",
+      "salaryGross": "35-55M VND",
+      "salaryNet": "28-44M VND",
+      "location": "Q.Cầu Giấy, Hà Nội",
+      "tags": [
+        "Onsite",
+        "Tech",
+        "13th month"
+      ],
+      "description": "Build enterprise web apps with React, TypeScript and modern tooling for global clients",
+      "requirements": [
+        "4+ years React",
+        "TypeScript fluent",
+        "English communication"
+      ]
+    },
+    {
+      "id": "7",
+      "company": "Techcombank",
+      "logo": "🏦",
+      "title": "DevOps Engineer",
+      "salaryGross": "45-70M VND",
+      "salaryNet": "36-56M VND",
+      "location": "Q.Hoàn Kiếm, Hà Nội",
+      "tags": [
+        "Hybrid",
+        "Banking",
+        "Insurance"
+      ],
+      "description": "Build and maintain CI/CD pipelines and Kubernetes infrastructure for digital banking",
+      "requirements": [
+        "K8s + Docker",
+        "Terraform / Ansible",
+        "3+ years DevOps"
+      ]
+    },
+    {
+      "id": "8",
+      "company": "VinAI",
+      "logo": "🤖",
+      "title": "AI/ML Engineer",
+      "salaryGross": "70-120M VND",
+      "salaryNet": "56-96M VND",
+      "location": "Q.Long Biên, Hà Nội",
+      "tags": [
+        "Hybrid",
+        "AI",
+        "RSU"
+      ],
+      "description": "Develop computer vision and NLP models for VinFast smart vehicles",
+      "requirements": [
+        "PyTorch / TensorFlow",
+        "PhD or 3+ years ML",
+        "Published research a plus"
+      ]
+    },
+    {
+      "id": "9",
+      "company": "Zalo",
+      "logo": "💬",
+      "title": "Mobile Engineer (iOS)",
+      "salaryGross": "40-65M VND",
+      "salaryNet": "32-52M VND",
+      "location": "Q.7, HCM",
+      "tags": [
+        "Hybrid",
+        "Tech",
+        "Stock Options"
+      ],
+      "description": "Ship features used by 75M+ Vietnamese users on the Zalo iOS app",
+      "requirements": [
+        "Swift / SwiftUI",
+        "3+ years iOS",
+        "Performance optimization"
+      ]
+    },
+    {
+      "id": "10",
+      "company": "Be Group",
+      "logo": "🛵",
+      "title": "Backend Engineer (Go)",
+      "salaryGross": "38-60M VND",
+      "salaryNet": "30-48M VND",
+      "location": "Q.4, HCM",
+      "tags": [
+        "Hybrid",
+        "Tech",
+        "13th month"
+      ],
+      "description": "Scale ride-hailing backend services handling millions of trips per month",
+      "requirements": [
+        "Go / Golang",
+        "Microservices",
+        "Kafka / Redis"
+      ]
+    },
+    {
+      "id": "11",
+      "company": "Sendo",
+      "logo": "📮",
+      "title": "UX/UI Designer",
+      "salaryGross": "25-40M VND",
+      "salaryNet": "20-32M VND",
+      "location": "Q.3, HCM",
+      "tags": [
+        "Remote",
+        "E-commerce",
+        "Insurance"
+      ],
+      "description": "Design intuitive shopping experiences for the leading domestic marketplace",
+      "requirements": [
+        "Figma fluency",
+        "Design system experience",
+        "3+ years UX"
+      ]
+    },
+    {
+      "id": "12",
+      "company": "Lazada",
+      "logo": "🛒",
+      "title": "Senior QA Automation",
+      "salaryGross": "35-55M VND",
+      "salaryNet": "28-44M VND",
+      "location": "Q.1, HCM",
+      "tags": [
+        "Hybrid",
+        "E-commerce",
+        "Premium Health"
+      ],
+      "description": "Build automated test suites for checkout and seller-facing products",
+      "requirements": [
+        "Cypress / Playwright",
+        "API testing",
+        "4+ years QA"
+      ]
+    },
+    {
+      "id": "13",
+      "company": "Viettel Digital",
+      "logo": "📡",
+      "title": "Cloud Architect",
+      "salaryGross": "70-100M VND",
+      "salaryNet": "56-80M VND",
+      "location": "Q.Ba Đình, Hà Nội",
+      "tags": [
+        "Onsite",
+        "Telecom",
+        "13th month"
+      ],
+      "description": "Architect multi-cloud solutions for ViettelPay and digital services",
+      "requirements": [
+        "AWS / GCP certified",
+        "7+ years cloud",
+        "Solution design"
+      ]
+    },
+    {
+      "id": "14",
+      "company": "Axie Infinity",
+      "logo": "🎮",
+      "title": "Smart Contract Engineer",
+      "salaryGross": "80-130M VND",
+      "salaryNet": "64-104M VND",
+      "location": "Remote",
+      "tags": [
+        "Remote",
+        "Web3",
+        "Stock Options"
+      ],
+      "description": "Write and audit Solidity contracts powering the largest play-to-earn ecosystem",
+      "requirements": [
+        "Solidity expert",
+        "Security mindset",
+        "2+ years on-chain"
+      ]
+    },
+    {
+      "id": "15",
+      "company": "Topica EdTech",
+      "logo": "📚",
+      "title": "Content Marketing Lead",
+      "salaryGross": "30-50M VND",
+      "salaryNet": "24-40M VND",
+      "location": "Q.Đống Đa, Hà Nội",
+      "tags": [
+        "Hybrid",
+        "EdTech",
+        "13th month"
+      ],
+      "description": "Lead a content team producing learning materials across SEA markets",
+      "requirements": [
+        "5+ years content",
+        "SEO + analytics",
+        "Team leadership"
+      ]
     }
   ],
   "applications": [
@@ -138,6 +338,34 @@
       "updatedAt": "2026-05-22T07:33:30.112Z",
       "id": "app-1779435204645",
       "viewedAt": "2026-05-22T07:33:30.112Z"
+    },
+    {
+      "userId": 1,
+      "job": {
+        "id": "3",
+        "company": "Tiki",
+        "logo": "📦",
+        "title": "Data Analyst Lead",
+        "salaryGross": "40-60M VND",
+        "salaryNet": "32-48M VND",
+        "location": "Q.Tân Bình, HCM",
+        "tags": [
+          "Hybrid",
+          "Data",
+          "Stock Options"
+        ],
+        "description": "Lead analytics team to optimize supply chain and customer experience",
+        "requirements": [
+          "SQL & Python",
+          "4+ years experience",
+          "Team management"
+        ]
+      },
+      "status": "viewed",
+      "appliedAt": "2026-05-22T07:39:10.151Z",
+      "updatedAt": "2026-05-22T07:39:15.195Z",
+      "id": "app-1779435550151",
+      "viewedAt": "2026-05-22T07:39:15.195Z"
     }
   ],
   "profiles": [
@@ -155,5 +383,13 @@
       "id": 1
     }
   ],
-  "favorites": []
+  "favorites": [
+    {
+      "userId": 1,
+      "jobId": "1",
+      "createdAt": "2026-05-22T07:39:02.737Z",
+      "id": 1
+    }
+  ],
+  "cvs": []
 }

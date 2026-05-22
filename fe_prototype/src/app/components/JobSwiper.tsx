@@ -19,6 +19,7 @@ interface JobSwiperProps {
   onApply: (job: Job) => void;
   onSkip: (job: Job) => void;
   onFavorite?: (job: Job) => void;
+  onChangeCv?: () => void;
   cvName?: string;
   cvUpdatedAt?: string;
 }
@@ -28,8 +29,9 @@ export function JobSwiper({
   onApply,
   onSkip,
   onFavorite,
-  cvName = 'CV_Frontend_2026.pdf',
-  cvUpdatedAt = '15/05/2026',
+  onChangeCv,
+  cvName = 'Chưa có CV',
+  cvUpdatedAt = '—',
 }: JobSwiperProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [swipedJobs, setSwipedJobs] = useState<{ job: Job; direction: 'left' | 'right' | 'fav' }[]>([]);
@@ -127,7 +129,11 @@ export function JobSwiper({
                     <p className="font-semibold text-gray-900 truncate">{cvName}</p>
                     <p className="text-xs text-gray-500">Cập nhật: {cvUpdatedAt}</p>
                   </div>
-                  <button className="text-xs font-semibold text-emerald-700 px-3 py-1.5 rounded-lg bg-white border border-emerald-200 hover:bg-emerald-50">
+                  <button
+                    type="button"
+                    onClick={onChangeCv}
+                    className="text-xs font-semibold text-emerald-700 px-3 py-1.5 rounded-lg bg-white border border-emerald-200 hover:bg-emerald-50"
+                  >
                     Đổi CV
                   </button>
                 </div>
@@ -141,6 +147,7 @@ export function JobSwiper({
             </Button>
             <Button
               onClick={confirmApply}
+              disabled={!cvName || cvName === 'Chưa có CV'}
               className="bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white"
             >
               Gửi ứng tuyển

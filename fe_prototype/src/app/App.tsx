@@ -6,6 +6,7 @@ import { GhostMode } from './components/GhostMode';
 import { SalaryValuation } from './components/SalaryValuation';
 import { AuthScreen, AuthUser } from './components/AuthScreen';
 import { ProfileVisibility } from './components/ProfileVisibility';
+import { CvManagerDialog } from './components/CvManagerDialog';
 import { Application, Job } from './data/mockData';
 import {
   jobsApi,
@@ -14,6 +15,7 @@ import {
   favoritesApi,
   ApiApplication,
   ApiProfile,
+  ApiCv,
 } from './lib/api';
 import { Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
@@ -27,8 +29,9 @@ const DEFAULT_PROFILE: Omit<ApiProfile, 'userId'> = {
   discoverable: true,
   blockedCompanies: ['FPT Software'],
   currentSalary: 35000000,
-  cvName: 'CV_Frontend_2026.pdf',
-  cvUpdatedAt: '15/05/2026',
+  cvName: 'Chưa có CV',
+  cvUpdatedAt: '—',
+  activeCvId: null,
 };
 
 function toApplication(api: ApiApplication): Application {
@@ -51,6 +54,7 @@ export default function App() {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [dataLoading, setDataLoading] = useState(false);
   const [dataError, setDataError] = useState<string | null>(null);
+  const [cvManagerOpen, setCvManagerOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -125,6 +129,14 @@ export default function App() {
     } catch {
       toast.error('Không lưu được thay đổi, thử lại.');
     }
+  };
+
+  const handleSelectCv = async (cv: ApiCv) => {
+    await updateProfile({
+      cvName: cv.name,
+      cvUpdatedAt: new Date(cv.uploadedAt).toLocaleDateString('vi-VN'),
+      activeCvId: cv.id,
+    });
   };
 
   const handleApply = async (job: Job) => {
@@ -224,6 +236,7 @@ export default function App() {
                   onApply={handleApply}
                   onSkip={handleSkip}
                   onFavorite={handleFavorite}
+                  onChangeCv={() => setCvManagerOpen(true)}
                   cvName={profile?.cvName}
                   cvUpdatedAt={profile?.cvUpdatedAt}
                 />
@@ -261,6 +274,7 @@ export default function App() {
                   }}
                   connectCount={12}
                   cvName={profile.cvName}
+                  onChangeCv={() => setCvManagerOpen(true)}
                 />
                 <div className="mt-6">
                   <GhostMode
@@ -312,6 +326,16 @@ export default function App() {
           </>
         )}
       </main>
+
+      {authUser && (
+        <CvManagerDialog
+          open={cvManagerOpen}
+          onOpenChange={setCvManagerOpen}
+          userId={authUser.id}
+          activeCvId={profile?.activeCvId ?? null}
+          onSelect={handleSelectCv}
+        />
+      )}
     </div>
   );
 }

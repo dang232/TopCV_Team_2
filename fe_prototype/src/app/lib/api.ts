@@ -28,6 +28,16 @@ export interface ApiProfile {
   currentSalary: number;
   cvName: string;
   cvUpdatedAt: string;
+  activeCvId?: string | null;
+}
+
+export interface ApiCv {
+  id: string;
+  userId: string;
+  name: string;
+  size: number;
+  dataUrl: string;
+  uploadedAt: string;
 }
 
 export interface ApiFavorite {
@@ -140,5 +150,26 @@ export const favoritesApi = {
   },
   remove(id: string | number): Promise<void> {
     return request<void>(`/favorites/${id}`, { method: 'DELETE' });
+  },
+};
+
+export const cvsApi = {
+  listByUser(userId: string): Promise<ApiCv[]> {
+    return request<ApiCv[]>(
+      `/cvs?userId=${encodeURIComponent(userId)}&_sort=uploadedAt&_order=desc`
+    );
+  },
+  create(input: Omit<ApiCv, 'id' | 'uploadedAt'>): Promise<ApiCv> {
+    return request<ApiCv>('/cvs', {
+      method: 'POST',
+      body: JSON.stringify({
+        ...input,
+        id: `cv-${Date.now()}`,
+        uploadedAt: new Date().toISOString(),
+      }),
+    });
+  },
+  remove(id: string): Promise<void> {
+    return request<void>(`/cvs/${id}`, { method: 'DELETE' });
   },
 };
