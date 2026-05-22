@@ -1,4 +1,5 @@
 /.omc
+**/.omc/
 
 # Env / secrets
 .env
