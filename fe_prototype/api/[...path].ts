@@ -137,9 +137,3 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(500).json({ error: message });
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: { sizeLimit: '1mb' },
-  },
-};
