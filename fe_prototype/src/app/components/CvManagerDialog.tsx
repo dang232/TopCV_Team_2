@@ -21,7 +21,7 @@ interface Props {
   onSelect: (cv: ApiCv) => void;
 }
 
-const MAX_BYTES = 5 * 1024 * 1024;
+const MAX_BYTES = 500 * 1024;
 const ACCEPTED = '.pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document';
 
 function formatSize(bytes: number) {
@@ -74,7 +74,7 @@ export function CvManagerDialog({ open, onOpenChange, userId, activeCvId, onSele
     if (!files || files.length === 0) return;
     const file = files[0];
     if (file.size > MAX_BYTES) {
-      toast.error('File quá lớn (tối đa 5MB)');
+      toast.error('File quá lớn (tối đa 500KB cho bản deploy)');
       return;
     }
     setUploading(true);
@@ -124,7 +124,7 @@ export function CvManagerDialog({ open, onOpenChange, userId, activeCvId, onSele
         <DialogHeader>
           <DialogTitle>Quản lý CV</DialogTitle>
           <DialogDescription>
-            Tải lên CV mới hoặc chọn CV để gửi cho nhà tuyển dụng. Hỗ trợ PDF, DOC, DOCX (tối đa 5MB).
+            Tải lên CV mới hoặc chọn CV để gửi cho nhà tuyển dụng. Hỗ trợ PDF, DOC, DOCX (tối đa 500KB).
           </DialogDescription>
         </DialogHeader>
 
@@ -150,7 +150,7 @@ export function CvManagerDialog({ open, onOpenChange, userId, activeCvId, onSele
             <span className="text-sm font-semibold">
               {uploading ? 'Đang tải lên...' : 'Tải lên CV mới'}
             </span>
-            <span className="text-[11px] text-emerald-600/80">PDF · DOC · DOCX · ≤ 5MB</span>
+            <span className="text-[11px] text-emerald-600/80">PDF · DOC · DOCX · ≤ 500KB</span>
           </button>
         </div>
 
