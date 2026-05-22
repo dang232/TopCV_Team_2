@@ -1,0 +1,16 @@
+/* Radix UI Switch Styles */
+[role="switch"] {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+[role="switch"] span {
+  display: block;
+  transition: transform 0.2s ease;
+}
+
+[role="switch"][data-state="checked"] span {
+  transform: translateX(1.75rem);
+}
