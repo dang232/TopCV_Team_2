@@ -1,13 +1,15 @@
 import { useState } from 'react';
 import { motion } from 'motion/react';
-import { Mail, Lock, User, Eye, EyeOff, Sparkles } from 'lucide-react';
+import { Mail, Lock, User, Eye, EyeOff, Sparkles, Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs';
 import { toast } from 'sonner';
+import { usersApi } from '../lib/api';
 
 export interface AuthUser {
+  id: string;
   name: string;
   email: string;
 }
@@ -16,30 +18,10 @@ interface AuthScreenProps {
   onAuth: (user: AuthUser) => void;
 }
 
-const STORAGE_KEY = 'topcv_demo_accounts';
-
-interface StoredAccount {
-  name: string;
-  email: string;
-  password: string;
-}
-
-function loadAccounts(): StoredAccount[] {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return raw ? (JSON.parse(raw) as StoredAccount[]) : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveAccounts(accounts: StoredAccount[]) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(accounts));
-}
-
 export function AuthScreen({ onAuth }: AuthScreenProps) {
   const [mode, setMode] = useState<'login' | 'register'>('login');
   const [showPassword, setShowPassword] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
@@ -49,22 +31,34 @@ export function AuthScreen({ onAuth }: AuthScreenProps) {
   const [regPassword, setRegPassword] = useState('');
   const [regConfirm, setRegConfirm] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    const accounts = loadAccounts();
-    const match = accounts.find(
-      (a) => a.email.toLowerCase() === loginEmail.trim().toLowerCase() && a.password === loginPassword
-    );
-    if (!match) {
-      toast.error('Email hoặc mật khẩu không đúng');
-      return;
-    }
-    toast.success(`Chào mừng trở lại, ${match.name}!`);
-    onAuth({ name: match.name, email: match.email });
+  const handleApiError = (err: unknown) => {
+    const msg =
+      err instanceof Error ? err.message : 'Không kết nối được tới máy chủ';
+    toast.error(`${msg}. Đảm bảo json-server đang chạy ở cổng 3001.`);
   };
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      const user = await usersApi.findByEmail(loginEmail.trim());
+      if (!user || user.password !== loginPassword) {
+        toast.error('Email hoặc mật khẩu không đúng');
+        return;
+      }
+      toast.success(`Chào mừng trở lại, ${user.name}!`);
+      onAuth({ id: user.id, name: user.name, email: user.email });
+    } catch (err) {
+      handleApiError(err);
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  const handleRegister = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (submitting) return;
     if (regPassword.length < 6) {
       toast.error('Mật khẩu phải có ít nhất 6 ký tự');
       return;
@@ -73,19 +67,25 @@ export function AuthScreen({ onAuth }: AuthScreenProps) {
       toast.error('Mật khẩu nhập lại không khớp');
       return;
     }
-    const accounts = loadAccounts();
-    if (accounts.some((a) => a.email.toLowerCase() === regEmail.trim().toLowerCase())) {
-      toast.error('Email này đã được đăng ký');
-      return;
+    setSubmitting(true);
+    try {
+      const existing = await usersApi.findByEmail(regEmail.trim());
+      if (existing) {
+        toast.error('Email này đã được đăng ký');
+        return;
+      }
+      const created = await usersApi.create({
+        name: regName.trim(),
+        email: regEmail.trim(),
+        password: regPassword,
+      });
+      toast.success(`Tạo tài khoản thành công! Xin chào ${created.name}`);
+      onAuth({ id: created.id, name: created.name, email: created.email });
+    } catch (err) {
+      handleApiError(err);
+    } finally {
+      setSubmitting(false);
     }
-    const newAccount: StoredAccount = {
-      name: regName.trim(),
-      email: regEmail.trim(),
-      password: regPassword,
-    };
-    saveAccounts([...accounts, newAccount]);
-    toast.success(`Tạo tài khoản thành công! Xin chào ${newAccount.name}`);
-    onAuth({ name: newAccount.name, email: newAccount.email });
   };
 
   return (
@@ -158,8 +158,18 @@ export function AuthScreen({ onAuth }: AuthScreenProps) {
                   </div>
                 </div>
 
-                <Button type="submit" className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white">
-                  Đăng nhập
+                <Button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white"
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" /> Đang xử lý...
+                    </>
+                  ) : (
+                    'Đăng nhập'
+                  )}
                 </Button>
 
                 <p className="text-center text-xs text-gray-500">
@@ -249,8 +259,18 @@ export function AuthScreen({ onAuth }: AuthScreenProps) {
                   </div>
                 </div>
 
-                <Button type="submit" className="w-full bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white">
-                  Tạo tài khoản
+                <Button
+                  type="submit"
+                  disabled={submitting}
+                  className="w-full bg-gradient-to-r from-violet-500 to-purple-600 hover:from-violet-600 hover:to-purple-700 text-white"
+                >
+                  {submitting ? (
+                    <>
+                      <Loader2 className="w-4 h-4 animate-spin" /> Đang tạo tài khoản...
+                    </>
+                  ) : (
+                    'Tạo tài khoản'
+                  )}
                 </Button>
 
                 <p className="text-center text-xs text-gray-500">
@@ -269,7 +289,7 @@ export function AuthScreen({ onAuth }: AuthScreenProps) {
         </div>
 
         <p className="text-center text-[11px] text-gray-400 mt-4">
-          Bản prototype • Dữ liệu lưu cục bộ trên trình duyệt
+          Bản prototype • Dữ liệu lưu tại json-server (db.json)
         </p>
       </motion.div>
     </div>

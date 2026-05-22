@@ -1,0 +1,159 @@
+{
+  "users": [
+    {
+      "name": "dangqwe321",
+      "email": "dangqwe321@gmail.com",
+      "password": "Dang25102005",
+      "createdAt": "2026-05-22T07:14:19.181Z",
+      "id": 1
+    }
+  ],
+  "jobs": [
+    {
+      "id": "1",
+      "company": "VNG Corporation",
+      "logo": "🎮",
+      "title": "Senior Product Manager",
+      "salaryGross": "50-80M VND",
+      "salaryNet": "40-64M VND",
+      "location": "Q.7, HCM",
+      "tags": [
+        "Hybrid",
+        "Tech",
+        "Insurance"
+      ],
+      "description": "Leading product strategy for gaming platform with 10M+ users",
+      "requirements": [
+        "5+ years PM experience",
+        "Gaming industry knowledge",
+        "Data-driven mindset"
+      ]
+    },
+    {
+      "id": "2",
+      "company": "Shopee",
+      "logo": "🛍️",
+      "title": "Marketing Manager",
+      "salaryGross": "45-70M VND",
+      "salaryNet": "36-56M VND",
+      "location": "Q.1, HCM",
+      "tags": [
+        "Remote",
+        "E-commerce",
+        "13th month"
+      ],
+      "description": "Drive marketing campaigns for Southeast Asia's leading marketplace",
+      "requirements": [
+        "3+ years marketing",
+        "E-commerce background",
+        "English fluent"
+      ]
+    },
+    {
+      "id": "3",
+      "company": "Tiki",
+      "logo": "📦",
+      "title": "Data Analyst Lead",
+      "salaryGross": "40-60M VND",
+      "salaryNet": "32-48M VND",
+      "location": "Q.Tân Bình, HCM",
+      "tags": [
+        "Hybrid",
+        "Data",
+        "Stock Options"
+      ],
+      "description": "Lead analytics team to optimize supply chain and customer experience",
+      "requirements": [
+        "SQL & Python",
+        "4+ years experience",
+        "Team management"
+      ]
+    },
+    {
+      "id": "4",
+      "company": "Grab",
+      "logo": "🚗",
+      "title": "Senior Business Analyst",
+      "salaryGross": "55-85M VND",
+      "salaryNet": "44-68M VND",
+      "location": "Q.2, HCM",
+      "tags": [
+        "Remote",
+        "Fintech",
+        "RSU"
+      ],
+      "description": "Strategic analysis for GrabPay expansion across Vietnam",
+      "requirements": [
+        "5+ years BA experience",
+        "Fintech knowledge",
+        "Stakeholder management"
+      ]
+    },
+    {
+      "id": "5",
+      "company": "Momo",
+      "logo": "💰",
+      "title": "Product Owner - Payments",
+      "salaryGross": "60-90M VND",
+      "salaryNet": "48-72M VND",
+      "location": "Q.1, HCM",
+      "tags": [
+        "Hybrid",
+        "Fintech",
+        "Premium Health"
+      ],
+      "description": "Own payment product roadmap for Vietnam's super app",
+      "requirements": [
+        "Payment domain expertise",
+        "Agile/Scrum",
+        "4+ years PO"
+      ]
+    }
+  ],
+  "applications": [
+    {
+      "userId": 1,
+      "job": {
+        "id": "2",
+        "company": "Shopee",
+        "logo": "🛍️",
+        "title": "Marketing Manager",
+        "salaryGross": "45-70M VND",
+        "salaryNet": "36-56M VND",
+        "location": "Q.1, HCM",
+        "tags": [
+          "Remote",
+          "E-commerce",
+          "13th month"
+        ],
+        "description": "Drive marketing campaigns for Southeast Asia's leading marketplace",
+        "requirements": [
+          "3+ years marketing",
+          "E-commerce background",
+          "English fluent"
+        ]
+      },
+      "status": "viewed",
+      "appliedAt": "2026-05-22T07:33:24.645Z",
+      "updatedAt": "2026-05-22T07:33:30.112Z",
+      "id": "app-1779435204645",
+      "viewedAt": "2026-05-22T07:33:30.112Z"
+    }
+  ],
+  "profiles": [
+    {
+      "ghostMode": false,
+      "seeking": true,
+      "discoverable": true,
+      "blockedCompanies": [
+        "FPT Software"
+      ],
+      "currentSalary": 35000000,
+      "cvName": "CV_Frontend_2026.pdf",
+      "cvUpdatedAt": "15/05/2026",
+      "userId": 1,
+      "id": 1
+    }
+  ],
+  "favorites": []
+}

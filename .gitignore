@@ -18,3 +18,6 @@ Thumbs.db
 # Logs
 *.log
 /fe_prototype/node_modules
+/fe_prototype/dist
+/fe_prototype/dist/assets
+/fe_prototype/dist

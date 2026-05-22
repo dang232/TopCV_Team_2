@@ -80,7 +80,7 @@ export function Navigation({
                 </motion.div>
               )}
 
-              <div className="relative" ref={menuRef}>
+              <div className="relative z-[60]" ref={menuRef}>
                 <button
                   onClick={() => setMenuOpen((v) => !v)}
                   className="w-8 h-8 bg-gradient-to-br from-violet-500 to-purple-600 rounded-full flex items-center justify-center text-white text-xs font-bold shadow-sm hover:shadow-md transition-shadow"
@@ -93,7 +93,7 @@ export function Navigation({
                     initial={{ opacity: 0, y: -4, scale: 0.98 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     transition={{ duration: 0.12 }}
-                    className="absolute right-0 mt-2 w-60 bg-white border border-gray-100 rounded-xl shadow-lg overflow-hidden"
+                    className="absolute right-0 mt-2 w-60 z-[60] bg-white border border-gray-100 rounded-xl shadow-lg overflow-hidden"
                   >
                     <div className="px-4 py-3 border-b border-gray-100">
                       <p className="text-sm font-semibold text-gray-900 truncate">{userName ?? 'Người dùng'}</p>
